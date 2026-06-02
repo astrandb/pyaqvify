@@ -15,7 +15,7 @@ from aiohttp.http_exceptions import TransferEncodingError
 from .const import AIO_TIMEOUT, AQVIFY_API, VERSION
 
 CONTENT_TYPE = "application/json"
-USER_AGENT_BASE = f"pyaqify/{VERSION}"
+USER_AGENT_BASE = f"pyaqvify/{VERSION}"
 
 _LOGGER = logging.getLogger(__name__)
 

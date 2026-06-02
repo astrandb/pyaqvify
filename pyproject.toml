@@ -3,7 +3,7 @@ requires = ["setuptools>=66.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyaqify"
+name = "pyaqvify"
 license = { text = "MIT" }
 dynamic = ["version"]
 authors = [{ name = "Ake Strandberg", email = "ake@strandberg.eu" }]
@@ -18,14 +18,14 @@ dependencies = ["aiohttp"]
 requires-python = ">=3.14.0"
 
 [project.urls]
-Repository = "https://github.com/nordicopen/pyaqify"
-BugTracker = "https://github.com/nordicopen/pyaqify/issues"
+Repository = "https://github.com/astrandb/pyaqvify"
+BugTracker = "https://github.com/astrandb/pyaqvify/issues"
 
 [tool.setuptools.dynamic]
-version = { attr = "pyaqify.const.VERSION" }
+version = { attr = "pyaqvify.const.VERSION" }
 
 [tool.setuptools.packages.find]
-include = ["pyaqify*"]
+include = ["pyaqvify*"]
 
 [tool.mypy]
 python_version = "3.14"

@@ -1,4 +1,4 @@
-"""Constants for pyaqify."""
+"""Constants for pyaqvify."""
 
 VERSION = "0.0.1"
 
