@@ -1,15 +1,13 @@
-"""Data models for Miele API."""
-
-from __future__ import annotations
+"""Data models for Aqvify API."""
 
 from typing import Any
 
 
-class MieleDevices:
+class AqvifyDevices:
     """Data for all devices from API."""
 
     def __init__(self, raw_data: dict) -> None:
-        """Initialize MieleDevices."""
+        """Initialize AqvifyDevices."""
         self.raw_data = raw_data
 
     @property

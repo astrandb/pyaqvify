@@ -1,9 +1,9 @@
-## pymiele
+## pyaqify
 
-Python library for Miele integration with Home Assistant.
+Python library for Aqvify integration with Home Assistant.
 The library is distributed via pypi.org.
 
 ### Installation
 ```bash
-$ pip install pymiele
+$ pip install pyaqify
 ```

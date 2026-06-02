@@ -14,13 +14,13 @@ test:
 	pytest -s -v
 
 bump:
-	bump2version --allow-dirty patch setup.cfg pymiele/const.py
+	bump2version --allow-dirty patch setup.cfg pyaqify/const.py
 
 bump_minor:
-	bump2version --allow-dirty minor setup.cfg pymiele/const.py
+	bump2version --allow-dirty minor setup.cfg pyaqify/const.py
 
 bump_major:
-	bump2version --allow-dirty major setup.cfg pymiele/const.py
+	bump2version --allow-dirty major setup.cfg pyaqify/const.py
 
 doc:
 	rm -rf html
@@ -38,5 +38,5 @@ publish_test:
 
 publish:
 	# build publish_docs
-	twine upload --repository pymiele dist/*
+	twine upload --repository pyaqify dist/*
 

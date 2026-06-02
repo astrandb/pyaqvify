@@ -3,7 +3,7 @@ requires = ["setuptools>=66.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pymiele"
+name = "pyaqify"
 license = { text = "MIT" }
 dynamic = ["version"]
 authors = [{ name = "Ake Strandberg", email = "ake@strandberg.eu" }]
@@ -18,14 +18,14 @@ dependencies = ["aiohttp"]
 requires-python = ">=3.14.0"
 
 [project.urls]
-Repository = "https://github.com/nordicopen/pymiele"
-BugTracker = "https://github.com/nordicopen/pymiele/issues"
+Repository = "https://github.com/nordicopen/pyaqify"
+BugTracker = "https://github.com/nordicopen/pyaqify/issues"
 
 [tool.setuptools.dynamic]
-version = { attr = "pymiele.const.VERSION" }
+version = { attr = "pyaqify.const.VERSION" }
 
 [tool.setuptools.packages.find]
-include = ["pymiele*"]
+include = ["pyaqify*"]
 
 [tool.mypy]
 python_version = "3.14"
