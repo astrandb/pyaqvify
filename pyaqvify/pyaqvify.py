@@ -28,7 +28,7 @@ class AqvifyAPI:
         if headers := kwargs.pop("headers", {}):
             headers = dict(headers)
 
-        headers["x-api-secret"] = self.api_key
+        headers["x-api-key"] = self.api_key
 
         res = await self.websession.request(
             method,
