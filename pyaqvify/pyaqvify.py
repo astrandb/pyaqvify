@@ -39,15 +39,15 @@ class AqvifyAPI:
         res.raise_for_status()
         return res
 
-    async def authenticate(self) -> bool:
+    async def async_authenticate(self) -> bool:
         """Test if we can authenticate with the host."""
         try:
-            await self.get_account_id()
+            await self.async_get_account_id()
         except AqvifyAuthException:
             return False
         return True
 
-    async def get_devices(self) -> dict[str, Any]:
+    async def async_get_devices(self) -> dict[str, Any]:
         """Get all devices."""
         async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
@@ -58,7 +58,7 @@ class AqvifyAPI:
             res.raise_for_status()
         return await res.json()
 
-    async def get_device_latest_data(self, device_id: str) -> dict[str, Any]:
+    async def async_get_device_latest_data(self, device_id: str) -> dict[str, Any]:
         """Get data for a specific device."""
         async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
@@ -69,7 +69,7 @@ class AqvifyAPI:
             res.raise_for_status()
         return await res.json()
 
-    async def get_account_id(self) -> dict[str, Any]:
+    async def async_get_account_id(self) -> dict[str, Any]:
         """Get current account_id from api."""
         try:
             res = await self.request(
@@ -80,7 +80,9 @@ class AqvifyAPI:
             return await res.json()
         except ClientResponseError as exc:
             _LOGGER.debug(
-                "API get_account_id failed. Status: %s, - %s", exc.code, exc.message
+                "API async_get_account_id failed. Status: %s, - %s",
+                exc.code,
+                exc.message,
             )
             if exc.code == 401:
                 raise AqvifyAuthException from exc
