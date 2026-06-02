@@ -10,6 +10,8 @@ from .const import AIO_TIMEOUT, AQVIFY_API as AQVIFY_API
 
 _LOGGER = logging.getLogger(__name__)
 
+ACCEPT_DATA = "application/json"
+
 
 class AqvifyAPI:
     """Class to communicate with the Aqvify API."""
@@ -51,7 +53,18 @@ class AqvifyAPI:
             res = await self.request(
                 "GET",
                 endpoint="/Device/Devices",
-                headers={"Accept": "application/json"},
+                headers={"Accept": ACCEPT_DATA},
+            )
+            res.raise_for_status()
+        return await res.json()
+
+    async def get_device_latest_data(self, device_id: str) -> dict[str, Any]:
+        """Get data for a specific device."""
+        async with asyncio.timeout(AIO_TIMEOUT):
+            res = await self.request(
+                "GET",
+                endpoint=f"/DeviceData/LatestValue/?deviceKey={device_id}",
+                headers={"Accept": ACCEPT_DATA},
             )
             res.raise_for_status()
         return await res.json()
@@ -59,7 +72,11 @@ class AqvifyAPI:
     async def get_account_id(self) -> dict[str, Any]:
         """Get current account_id from api."""
         try:
-            res = await self.request("GET", endpoint="/User/GetAccountId")
+            res = await self.request(
+                "GET",
+                endpoint="/User/GetAccountId",
+                headers={"Accept": ACCEPT_DATA},
+            )
             return await res.json()
         except ClientResponseError as exc:
             _LOGGER.debug(
