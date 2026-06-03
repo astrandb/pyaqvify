@@ -1,6 +1,29 @@
 """Data models for Aqvify API."""
 
 
+class AqvifyDevice:
+    """Data for a single device from API."""
+
+    def __init__(self, raw_data: dict) -> None:
+        """Initialize AqvifyDevice."""
+        self.raw_data = raw_data
+
+    @property
+    def raw(self) -> dict:
+        """Return raw data."""
+        return self.raw_data
+
+    @property
+    def device_id(self) -> str | None:
+        """Return the device ID."""
+        return self.raw_data.get("deviceId")
+
+    @property
+    def name(self) -> str | None:
+        """Return the name."""
+        return self.raw_data.get("name")
+
+
 class AqvifyDevices:
     """Data for all devices from API."""
 
@@ -14,10 +37,13 @@ class AqvifyDevices:
         return self.raw_data
 
     @property
-    def devices(self) -> list[str]:
+    def devices(self) -> dict[str, AqvifyDevice]:
         """Return list of all devices."""
 
-        return list(self.raw_data.keys())
+        return {
+            device_id: AqvifyDevice(device_data)
+            for device_id, device_data in self.raw_data.items()
+        }
 
 
 class AqvifyDeviceData:
