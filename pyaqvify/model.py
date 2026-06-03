@@ -2,7 +2,7 @@
 
 
 class AqvifyDevice:
-    """Data for a single device from API."""
+    """Metaata for a single device from API."""
 
     def __init__(self, raw_data: dict) -> None:
         """Initialize AqvifyDevice."""
@@ -14,9 +14,9 @@ class AqvifyDevice:
         return self.raw_data
 
     @property
-    def device_id(self) -> str | None:
+    def device_key(self) -> str | None:
         """Return the device ID."""
-        return self.raw_data.get("deviceId")
+        return self.raw_data.get("deviceKey")
 
     @property
     def name(self) -> str | None:
@@ -41,8 +41,8 @@ class AqvifyDevices:
         """Return list of all devices."""
 
         return {
-            device_id: AqvifyDevice(device_data)
-            for device_id, device_data in self.raw_data.items()
+            AqvifyDevice(device).device_key: AqvifyDevice(device)
+            for device in self.raw_data
         }
 
 
