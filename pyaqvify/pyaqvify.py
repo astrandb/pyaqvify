@@ -7,7 +7,12 @@ from typing import Any
 from aiohttp import ClientResponse, ClientResponseError, ClientSession
 
 from .const import AIO_TIMEOUT, AQVIFY_API as AQVIFY_API
-from .model import AqvifyHourAggregatedValues
+from .model import (
+    AqvifyAccount,
+    AqvifyDeviceData,
+    AqvifyDevices,
+    AqvifyHourAggregatedValues,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -48,7 +53,7 @@ class AqvifyAPI:
             return False
         return True
 
-    async def async_get_devices(self) -> dict[str, Any]:
+    async def async_get_devices(self) -> AqvifyDevices:
         """Get all devices."""
         async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
@@ -57,9 +62,9 @@ class AqvifyAPI:
                 headers={"Accept": ACCEPT_DATA},
             )
             res.raise_for_status()
-        return await res.json()
+        return AqvifyDevices(await res.json())
 
-    async def async_get_device_latest_data(self, device_id: str) -> dict[str, Any]:
+    async def async_get_device_latest_data(self, device_id: str) -> AqvifyDeviceData:
         """Get data for a specific device."""
         async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
@@ -68,7 +73,7 @@ class AqvifyAPI:
                 headers={"Accept": ACCEPT_DATA},
             )
             res.raise_for_status()
-        return await res.json()
+        return AqvifyDeviceData(await res.json())
 
     async def async_get_hour_aggregation(
         self, device_id: str, begin_time: str, end_time: str
@@ -87,7 +92,7 @@ class AqvifyAPI:
         json_data = await res.json()
         return [AqvifyHourAggregatedValues(data) for data in json_data]
 
-    async def async_get_account_id(self) -> dict[str, Any]:
+    async def async_get_account_id(self) -> AqvifyAccount:
         """Get current account_id from api."""
         try:
             res = await self.request(
@@ -95,7 +100,7 @@ class AqvifyAPI:
                 endpoint="/User/GetAccountId",
                 headers={"Accept": ACCEPT_DATA},
             )
-            return await res.json()
+            return AqvifyAccount(await res.json())
         except ClientResponseError as exc:
             _LOGGER.debug(
                 "API async_get_account_id failed. Status: %s, - %s",
