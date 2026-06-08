@@ -4,7 +4,7 @@ import asyncio
 import logging
 from typing import Any
 
-from aiohttp import ClientResponse, ClientResponseError, ClientSession
+from aiohttp import ClientResponse, ClientSession
 
 from .const import AIO_TIMEOUT, AQVIFY_API as AQVIFY_API
 from .model import (
@@ -42,6 +42,8 @@ class AqvifyAPI:
             **kwargs,
             headers=headers,
         )
+        if res.status == 401:
+            raise AqvifyAuthException("Authentication failure")
         res.raise_for_status()
         return res
 
@@ -61,7 +63,6 @@ class AqvifyAPI:
                 endpoint="/Device/Devices",
                 headers={"Accept": ACCEPT_DATA},
             )
-            res.raise_for_status()
         return AqvifyDevices(await res.json())
 
     async def async_get_device_latest_data(self, device_id: str) -> AqvifyDeviceData:
@@ -72,7 +73,6 @@ class AqvifyAPI:
                 endpoint=f"/DeviceData/LatestValue?deviceKey={device_id}",
                 headers={"Accept": ACCEPT_DATA},
             )
-            res.raise_for_status()
         return AqvifyDeviceData(await res.json())
 
     async def async_get_hour_aggregation(
@@ -88,28 +88,18 @@ class AqvifyAPI:
                 ),
                 headers={"Accept": ACCEPT_DATA},
             )
-            res.raise_for_status()
         json_data = await res.json()
         return [AqvifyHourAggregatedValues(data) for data in json_data]
 
     async def async_get_account_id(self) -> AqvifyAccount:
         """Get current account_id from api."""
-        try:
+        async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
                 "GET",
                 endpoint="/User/GetAccountId",
                 headers={"Accept": ACCEPT_DATA},
             )
-            return AqvifyAccount(await res.json())
-        except ClientResponseError as exc:
-            _LOGGER.debug(
-                "API async_get_account_id failed. Status: %s, - %s",
-                exc.code,
-                exc.message,
-            )
-            if exc.code == 401:
-                raise AqvifyAuthException from exc
-            raise
+        return AqvifyAccount(await res.json())
 
 
 class AqvifyException(Exception):

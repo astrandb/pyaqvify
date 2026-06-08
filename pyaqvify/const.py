@@ -1,6 +1,6 @@
 """Constants for pyaqvify."""
 
-VERSION = "0.0.8"
+VERSION = "0.0.9"
 
 AQVIFY_API = "https://public.aqvify.com/api/v1"
 
