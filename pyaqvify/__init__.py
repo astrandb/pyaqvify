@@ -6,6 +6,7 @@ from .model import (
     AqvifyDevice,
     AqvifyDeviceData,
     AqvifyDevices,
+    AqvifyHourAggregatedValueList,
     AqvifyHourAggregatedValues,
 )
 from .pyaqvify import AqvifyAPI, AqvifyAuthException
@@ -17,6 +18,7 @@ __all__ = [
     "AqvifyDevice",
     "AqvifyDeviceData",
     "AqvifyDevices",
+    "AqvifyHourAggregatedValueList",
     "AqvifyHourAggregatedValues",
     "__version__",
 ]
