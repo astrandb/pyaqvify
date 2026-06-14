@@ -163,3 +163,22 @@ class AqvifyHourAggregatedValues:
     def out_volume(self) -> int | float | None:
         """Return the out-volume value."""
         return self.raw_data.get("outVolume")
+
+
+class AqvifyHourAggregatedValueList:
+    """Data for aggregated endpoint from API."""
+
+    def __init__(self, raw_data: dict) -> None:
+        """Initialize AqvifyHourAggregatedValueList."""
+        self.raw_data = raw_data
+
+    @property
+    def raw(self) -> dict:
+        """Return raw data."""
+        return self.raw_data
+
+    @property
+    def aggr_list(self) -> list[str, AqvifyHourAggregatedValues]:
+        """Return list of all HourAggregatedValues."""
+
+        return [AqvifyHourAggregatedValues(datapoint) for datapoint in self.raw_data]

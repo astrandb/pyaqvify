@@ -11,7 +11,7 @@ from .model import (
     AqvifyAccount,
     AqvifyDeviceData,
     AqvifyDevices,
-    AqvifyHourAggregatedValues,
+    AqvifyHourAggregatedValueList,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -35,13 +35,15 @@ class AqvifyAPI:
             headers = dict(headers)
 
         headers["x-api-key"] = self.api_key
-
+        _LOGGER.debug("Request: %s | %s", method, f"{AQVIFY_API}{endpoint}")
         res = await self.websession.request(
             method,
             f"{AQVIFY_API}{endpoint}",
             **kwargs,
             headers=headers,
         )
+        if res.status >= 300:
+            _LOGGER.debug("Response status: %s", res.status)
         if res.status == 401:
             raise AqvifyAuthException("Authentication failure")
         res.raise_for_status()
@@ -77,7 +79,7 @@ class AqvifyAPI:
 
     async def async_get_hour_aggregation(
         self, device_id: str, begin_time: str, end_time: str
-    ) -> list[AqvifyHourAggregatedValues]:
+    ) -> AqvifyHourAggregatedValueList:
         """Get data for a specific device."""
         async with asyncio.timeout(AIO_TIMEOUT):
             res = await self.request(
@@ -88,8 +90,7 @@ class AqvifyAPI:
                 ),
                 headers={"Accept": ACCEPT_DATA},
             )
-        json_data = await res.json()
-        return [AqvifyHourAggregatedValues(data) for data in json_data]
+        return AqvifyHourAggregatedValueList(await res.json())
 
     async def async_get_account_id(self) -> AqvifyAccount:
         """Get current account_id from api."""
