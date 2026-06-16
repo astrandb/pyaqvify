@@ -78,6 +78,16 @@ class AqvifyDeviceData:
         """Return the status."""
         return self.raw_data.get("status")
 
+    @property
+    def temperature(self) -> int | float | None:
+        """Return the temperature value."""
+        return self.raw_data.get("temperature")
+
+    @property
+    def volume(self) -> int | float | None:
+        """Return the volume value."""
+        return self.raw_data.get("volume")
+
 
 class AqvifyAccount:
     """Data for account from API."""
@@ -95,6 +105,11 @@ class AqvifyAccount:
     def account_id(self) -> str:
         """Return the account ID."""
         return self.raw_data.get("accountId", "")
+
+    @property
+    def name(self) -> str:
+        """Return the name associated with the account."""
+        return self.raw_data.get("name", "")
 
 
 class AqvifyHourAggregatedValues:
