@@ -2,6 +2,7 @@
 
 import asyncio
 import datetime as dt
+from datetime import datetime
 import logging
 import random
 from typing import Any
@@ -105,14 +106,25 @@ class AqvifyAPI:
         return AqvifyDeviceData(await res.json())
 
     async def async_get_hour_aggregation(
-        self, device_id: str, begin_time: str, end_time: str
+        self, device_id: str, begin_time: str | datetime, end_time: str | datetime
     ) -> AqvifyHourAggregatedValueList:
         """Get data for a specific device."""
+        date_time_fmt = "%Y-%m-%dT%H:%MZ"
+        begin_str = (
+            begin_time.strftime(date_time_fmt)
+            if isinstance(begin_time, datetime)
+            else begin_time
+        )
+        end_str = (
+            end_time.strftime(date_time_fmt)
+            if isinstance(end_time, datetime)
+            else end_time
+        )
         res = await self.request(
             "GET",
             endpoint=(
                 "/DeviceData/HourAggregateValues?deviceKey="
-                f"{device_id}&beginTime={begin_time}&endTime={end_time}"
+                f"{device_id}&beginTime={begin_str}&endTime={end_str}"
             ),
             headers={"Accept": ACCEPT_DATA},
         )
